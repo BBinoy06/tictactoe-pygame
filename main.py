@@ -3,14 +3,21 @@ import sys
 
 pygame.init()
 
-screen = pygame.display.set_mode(size=(400, 400))
+screen = pygame.display.set_mode(size=(500, 500))
+running = True
 
-while True:
+while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            running = False
 
-    pygame.display.update()
+    screen.fill("grey")
+
+    pygame.display.flip()
+    
+
+pygame.quit()
+
+    
     
