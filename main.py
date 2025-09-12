@@ -91,19 +91,29 @@ def computer_move(difficulty):
             row, col = random.choice(empty_cells)
             board[row][col] = "O"
             
-    if difficulty == "hard":
-        for (r, c) in empty_cells:
-                board[r][c] = mark
-                if check_win() == mark:
-                    board.grid[r][c] = " "
-                    return r, c
-                board.grid[r][c] = " "
 
 def switch_turn(turn):
     if turn == "player":
         return "computer"
     else:
         return "player"
+    
+def check_win(board):
+        for row in board:
+            if row[0] == row[1] == row[2] != " ":
+                return row[0]
+
+        for col in range(3):
+            if board[0][col] == board[1][col] == board[2][col] != " ":
+                return board[0][col]
+
+        if board[0][0] == board[1][1] == board[2][2] != " ":
+            return board[0][0]            
+
+        if board[0][2] == board[1][1] == board[2][0] != " ":
+            return board[0][2]
+
+        return None
 
         
     
@@ -137,7 +147,7 @@ while True:
                     current_screen = "menu"
                 else:
                     x, y = event.pos
-                    col = (x - xboard) // CELL_SIZE
+                    col = (x - xboard)// CELL_SIZE
                     row =(y - yboard)// CELL_SIZE
                     if 0 <=row < 3 and 0 <= col < 3:
                         if board[row][col] == " " and current_player == "X":
