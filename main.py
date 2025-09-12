@@ -23,6 +23,7 @@ def drawGrid():
 
     for i in range (1,3):
         pygame.draw.line(screen, BLACK, (xboard, yboard + i * CELL_SIZE), (xboard + BOARD_SIZE, yboard + i * CELL_SIZE), 5)
+        pygame.draw.line(screen, BLACK, (xboard + i * CELL_SIZE, yboard), (xboard + i * CELL_SIZE, yboard + BOARD_SIZE), 5)
 
 while running:
     screen.fill(GREY)
