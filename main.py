@@ -15,16 +15,19 @@ running = True
 easy_img = pygame.image.load("EasyBtn.png").convert_alpha()
 hard_img = pygame.image.load("HardBtn.png").convert_alpha()
 impossible_img = pygame.image.load("ImpossibleBtn.png").convert_alpha()
+home_img = pygame.image.load("HomeButton.png").convert_alpha()
 
 # change the size of buttons
 easy_img = pygame.transform.scale(easy_img, (150, 60))
 hard_img = pygame.transform.scale(hard_img, (150, 60))
 impossible_img = pygame.transform.scale(impossible_img, (150, 60))
+home_img = pygame.transform.scale(home_img, (20, 20))
 
 # positions
 easy_rect = easy_img.get_rect(topleft=(225, 200))
 hard_rect = hard_img.get_rect(topleft=(225, 300))
 impossible_rect = impossible_img.get_rect(topleft=(225, 400))
+home_rect = home_img.get_rect(topright=(WINDOW_SIZE - 30, 30))
 
 # colours
 BLACK = (0, 0, 0)
@@ -60,19 +63,28 @@ def drawGrid():
         pygame.draw.line(screen, BLACK, (xboard, yboard + i * CELL_SIZE), (xboard + BOARD_SIZE, yboard + i * CELL_SIZE), 5)
         pygame.draw.line(screen, BLACK, (xboard + i * CELL_SIZE, yboard), (xboard + i * CELL_SIZE, yboard + BOARD_SIZE), 5)
 
-difficulty = MenuButton()
-print("User selected:", difficulty)
+current_screen = "menu"
+difficulty = None
 
-running = True
-
-while running:
-    
+while True:
     screen.fill(GREY)
-    drawGrid()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    if current_screen == "menu":
+        difficulty = MenuButton()
+        print("User selected:", difficulty)
+        current_screen = "grid"
+
+    elif current_screen == "grid":
+        drawGrid()
+        screen.blit(home_img, home_rect)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if home_rect.collidepoint(event.pos):
+                    current_screen = "menu"
 
     pygame.display.flip()
     
