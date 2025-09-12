@@ -166,10 +166,26 @@ while True:
                     if 0 <=row < 3 and 0 <= col < 3:
                         if board[row][col] == " " and current_player == "X":
                             board[row][col] = "X"
-                            current_player = "O"
+
+                            if check_win(board) == "X":
+                                print("Player wins!")
+                                current_screen = "menu"
+                            elif is_full():
+                                print("It's a draw!")
+                                current_screen = "menu"
+                            else:
+
+                                computer_move(difficulty)
+                                if check_win(board) == "O":
+                                    print("Computer wins!")
+                                    current_screen = "menu"
+                                elif is_full():
+                                    print("It's a draw!")
+                                    current_screen = "menu"
 
                 
                 if difficulty == "easy":
                     computer_move(difficulty)
                     current_player = "X"
+
     pygame.display.flip()
