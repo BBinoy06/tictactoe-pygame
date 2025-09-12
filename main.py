@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 pygame.init()
 
@@ -10,6 +11,10 @@ CELL_SIZE = 180
 screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 pygame.display.set_caption("Tic Tac Toe")
 running = True
+
+board = [[" " for _ in range(3)] for _ in range(3)]
+current_player = "X"
+
 
 # images
 easy_img = pygame.image.load("EasyBtn.png").convert_alpha()
@@ -48,7 +53,7 @@ def MenuButton():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left click
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if easy_rect.collidepoint(event.pos):
                     return "easy"
                 elif hard_rect.collidepoint(event.pos):
@@ -63,6 +68,46 @@ def drawGrid():
         pygame.draw.line(screen, BLACK, (xboard, yboard + i * CELL_SIZE), (xboard + BOARD_SIZE, yboard + i * CELL_SIZE), 5)
         pygame.draw.line(screen, BLACK, (xboard + i * CELL_SIZE, yboard), (xboard + i * CELL_SIZE, yboard + BOARD_SIZE), 5)
 
+def draw_mark(board):
+    if current_screen == "grid":
+        for r in range(3):
+            for c in range(3):
+                if board[r][c] == "X":
+                    pygame.draw.line(screen, BLACK,
+                        (xboard + c*CELL_SIZE + 20, yboard + r*CELL_SIZE + 20),
+                        (xboard + (c+1)*CELL_SIZE - 20, yboard + (r+1)*CELL_SIZE - 20), 10)
+                    pygame.draw.line(screen, BLACK,
+                        (xboard + (c+1)*CELL_SIZE - 20, yboard + r*CELL_SIZE + 20),
+                        (xboard + c*CELL_SIZE + 20, yboard + (r+1)*CELL_SIZE - 20), 10)
+                elif board[r][c] == "O":
+                    pygame.draw.circle(screen, BLACK,
+                        (xboard + c*CELL_SIZE + CELL_SIZE//2, yboard + r*CELL_SIZE + CELL_SIZE//2),
+                        CELL_SIZE//2 - 20, 10)
+
+def computer_move(difficulty):
+    empty_cells = [(r, c) for r in range(3) for c in range(3) if board[r][c] == " "]
+    if difficulty == "easy":
+        if empty_cells:
+            row, col = random.choice(empty_cells)
+            board[row][col] = "O"
+            
+    if difficulty == "hard":
+        for (r, c) in empty_cells:
+                board[r][c] = mark
+                if check_win() == mark:
+                    board.grid[r][c] = " "
+                    return r, c
+                board.grid[r][c] = " "
+
+def switch_turn(turn):
+    if turn == "player":
+        return "computer"
+    else:
+        return "player"
+
+        
+    
+
 current_screen = "menu"
 difficulty = None
 
@@ -73,23 +118,34 @@ while True:
         difficulty = MenuButton()
         print("User selected:", difficulty)
         current_screen = "grid"
+        
+        board = [[" " for _ in range(3)] for _ in range(3)]
+        current_player = "X"
 
     elif current_screen == "grid":
         drawGrid()
+        draw_mark(board)
         screen.blit(home_img, home_rect)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+
+            if event.type ==pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if home_rect.collidepoint(event.pos):
                     current_screen = "menu"
+                else:
+                    x, y = event.pos
+                    col = (x - xboard) // CELL_SIZE
+                    row =(y - yboard)// CELL_SIZE
+                    if 0 <=row < 3 and 0 <= col < 3:
+                        if board[row][col] == " " and current_player == "X":
+                            board[row][col] = "X"
+                            current_player = "O"
 
+                
+                if difficulty == "easy":
+                    computer_move(difficulty)
+                    current_player = "X"
     pygame.display.flip()
-    
-
-pygame.quit()
-
-    
-    
