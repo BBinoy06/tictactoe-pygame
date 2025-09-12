@@ -115,6 +115,20 @@ def check_win(board):
 
         return None
 
+def is_full():
+        for row in board:
+            for cell in row:
+                if cell == " ":
+                    return False
+        return True
+
+def is_over():
+        if check_win() is not None:
+            return True
+        if is_full():
+            return True
+        return False
+
         
     
 
