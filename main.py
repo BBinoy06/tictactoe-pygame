@@ -3,20 +3,28 @@ import sys
 
 pygame.init()
 
-screen = pygame.display.set_mode(size=(500, 500))
-pygame.display.set_caption("Tic-Tac-Toe")
+WINDOW_SIZE = 600
+BOARD_SIZE = 540
+CELL_SIZE = 300
+
+screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
+pygame.display.set_caption("Tic Tac Toe")
 running = True
+
+# colours
 BLACK = (0, 0, 0)
+GREY = (200, 200, 200)
+
+xboard = (WINDOW_SIZE - BOARD_SIZE) // 2
+yboard = (WINDOW_SIZE - BOARD_SIZE) // 2
 
 def drawGrid():
-    blockSize = 100
-    for x in range(0, 500, blockSize):
-        for y in range(0, 500, blockSize):
-            square = pygame.Rect(x, y, blockSize, blockSize)
-            pygame.draw.rect(screen, BLACK, square, 1)
+    square_board = pygame.Rect(xboard, yboard, BOARD_SIZE, BOARD_SIZE)
+    pygame.draw.rect(screen, GREY, square_board)
+    
 
 while running:
-    screen.fill("grey")
+    screen.fill(GREY)
     drawGrid()
 
     for event in pygame.event.get():
