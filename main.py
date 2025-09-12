@@ -21,7 +21,8 @@ yboard = (WINDOW_SIZE - BOARD_SIZE) // 2
 def drawGrid():
     pygame.draw.rect(screen, GREY, (xboard, yboard, BOARD_SIZE, BOARD_SIZE))
 
-    pygame.draw.line(screen, BLACK, (xboard, yboard + 180), (xboard + BOARD_SIZE, yboard + CELL_SIZE), 5)
+    for i in range (1,3):
+        pygame.draw.line(screen, BLACK, (xboard, yboard + i * CELL_SIZE), (xboard + BOARD_SIZE, yboard + i * CELL_SIZE), 5)
 
 while running:
     screen.fill(GREY)
